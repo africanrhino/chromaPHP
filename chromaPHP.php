@@ -41,18 +41,23 @@ public function deleteCollection($collectionName) {
         return $this->sendRequest('POST', $this->baseUrl . '/api/v1/collections', $data);
     }
 
-    public function addEmbedding($collectionName, $embeddings, $metadatas, $documents, $ids, $incrementIndex) {
-        $data = [
-            'embeddings' => $embeddings,
-            'metadatas' => $metadatas,
-            'documents' => $documents,
-            'ids' => $ids,
-            'increment_index' => $incrementIndex
-        ];
-        return $this->sendRequest('POST', $this->baseUrl . '/api/v1/collections/' . $collectionName . '/add', $data);
-    }
 
-    public function getEmbedding($collectionName, $ids, $where, $whereDocument, $sort, $limit, $offset, $include) {
+public function listCollections() {
+    return $this->sendRequest('GET', $this->baseUrl . '/api/v1/collections', null);
+}
+
+public function addEmbeddings($collectionName, $embeddings, $metadatas, $documents, $ids, $incrementIndex) {
+    $data = [
+        'embeddings' => $embeddings,
+        'metadatas' => $metadatas,
+        'documents' => $documents,
+        'ids' => $ids,
+        'increment_index' => $incrementIndex
+    ];
+    $response = $this->sendRequest('POST', $this->baseUrl . '/api/v1/collections/' . $collectionName . '/add', $data);
+    return $response;
+}
+    public function getEmbeddings($collectionName, $ids, $where, $whereDocument, $sort, $limit, $offset, $include = []) {
         $data = [
             'ids' => $ids,
             'where' => $where,
@@ -62,9 +67,9 @@ public function deleteCollection($collectionName) {
             'offset' => $offset,
             'include' => $include
         ];
-        return $this->sendRequest('POST', $this->baseUrl . '/api/v1/collections/' . $collectionName . '/get', $data);
+        $response = $this->sendRequest('POST', $this->baseUrl . '/api/v1/collections/' . $collectionName . '/get', $data);
+        return $response;
     }
-
     public function deleteEmbedding($collectionName, $ids, $where, $whereDocument) {
         $data = [
             'ids' => $ids,
